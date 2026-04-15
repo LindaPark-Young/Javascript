@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+</head>
+<body>
+  
+   <ul class="list"></ul>
+   <button class="add">추가</button>
+   
+   <script>
+      const input = document.querySelector('.input');
+      const btn = document.querySelector('.add');
+      const list = document.querySelector('.list');
+          btn.addEventListener('click', () => {
+
+
+     const url = 
+'http://raw.githubusercontent.com/wapj/jsbackend/main/movieinfo.json';
+
+
+fetch(url)
+.then((res) => res.json()) //Promise.resolve(res.json())
+.catch((e) => console.log(e.message + '해서 요청에 실패했습니다.'))
+.then((data) => {
+    if(!data){
+        throw new Error('데이터가 없습니다.')
+    }
+    if (!data.articleList || data.articleList.length === 0){
+             throw new Error('데이터가 없습니다.')
+    }
+    return data.articleList; //promise.resolve(data.articleList)
+})
+
+.then((articles) => {
+ return articles.map((article, index) => ({title:article.title, rank:index+1
+    //같은 내용 return {title:article.title, rank:index+1}
+ }))//Promise([{title:'', rank:1}....{}])
+})
+ .then((movies) => {
+    for (let movie of movies) { 
+        const li = document.createElement('li');
+       li.textContent = `[${movie.rank}위] ${movie.title}`;
+      list.appendChild(li);
+
+}
+  
+}) 
+.catch((e) => {
+    
+    console.log(e.message);
+});
+       
+});
+
+
+     
+   </script>
+  
+
+  
+
+</body>
+</html>
